@@ -2,3 +2,4 @@ node_modules
 .sail
 .env
 env
+.vscode
