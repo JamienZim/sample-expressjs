@@ -9,9 +9,9 @@ router.get('/acceptances/:meetcode', rnswController.getAcceptances);
 /* POST programming language */
 router.post('/acceptances', rnswController.loadAcceptances);
 
-router.get('/', function(req, res, next) {
-    res.send('respond with a resource');
-});
+// router.get('/', function(req, res, next) {
+//     res.send('respond with a resource');
+// });
 
 /* PUT programming language */
 // router.put('/:id', update);

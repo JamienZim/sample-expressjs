@@ -2,7 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const app = express()
 const port = process.env.PORT || 3000;
-const defaultdbRouter = require('./src/routes/defaultdb.route');
+// const defaultdbRouter = require('./src/routes/defaultdb.route');
 const mongoDBRouter = require('./src/routes/rnsw.route');
 const cors = require('cors') 
 
