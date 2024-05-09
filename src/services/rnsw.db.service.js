@@ -118,9 +118,8 @@ async function loadAcceptanceTips(tips) {
 
 async function getAcceptanceTips(meetcode) {
     try {
-        const response = await queryFind('acceptance_tips',
+        const response = await findOneDoc('acceptance_tips',
             { 'meeting_code': meetcode },
-            {},
             {});
         return response;
     } catch (error) {
