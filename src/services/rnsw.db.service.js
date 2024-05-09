@@ -3,7 +3,11 @@ require('dotenv').config()
 const dbconfig = require('../configs/rnsw.db.config');
 
 const uri = process.env.RNSWMONGOURL;
-const client = new MongoClient(uri);
+const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    poolSize: 10, // Set connection pool size
+  });
 
 async function insertOne(collection, doc) {
     try {
