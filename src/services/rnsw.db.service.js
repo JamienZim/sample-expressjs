@@ -121,6 +121,7 @@ async function getAcceptanceTips(meetcode) {
         const response = await findOneDoc('acceptance_tips',
             { 'meeting_code': meetcode },
             {});
+            console.log(response);
         return response;
     } catch (error) {
         console.log(error);
