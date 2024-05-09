@@ -63,6 +63,7 @@ async function loadAcceptances(acceptances) {
         return response;
     } catch (error) {
         console.log(error);
+        return error;
     }
 }
 
@@ -84,6 +85,7 @@ async function getAcceptance(meetcode) {
         return response;
     } catch (error) {
         console.log(error);
+        return error;
     }
 }
 
@@ -123,6 +125,7 @@ async function getAcceptanceTips(meetcode) {
         return response;
     } catch (error) {
         console.log(error);
+        return error;
     }
 
 }

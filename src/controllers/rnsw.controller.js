@@ -21,7 +21,8 @@ async function getAcceptances(req, res) {
     try {
         console.log(` meetCode: ${meetCode}`)
         // res.status(200).json({ message: 'success' });
-        res.json(await rnsw.getAcceptance(meetCode));
+        const acceptance = await rnsw.getAcceptance(meetCode);
+        res.json(acceptance);
     } catch (error) {
         console.log('here2')
         console.log({ errStatus: error.status, message: error.message });
