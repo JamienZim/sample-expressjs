@@ -1,13 +1,15 @@
-const { MongoClient } = require("mongodb");
+const { MongoClient, ServerApiVersion } = require("mongodb");
 require('dotenv').config()
 const dbconfig = require('../configs/rnsw.db.config');
 
 const uri = process.env.RNSWMONGOURL;
 const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    poolSize: 10, // Set connection pool size
-  });
+    serverApi: {
+        version: ServerApiVersion.v1,
+        strict: true,
+        deprecationErrors: true,
+    }
+});
 
 async function insertOne(collection, doc) {
     try {
@@ -22,6 +24,20 @@ async function insertOne(collection, doc) {
     }
 }
 
+async function findOne(collection, query, options) {
+    try {
+        await client.connect();
+        const database = client.db(dbconfig.db.RNSWDB);
+        const col = database.collection(collection);
+        const response = await col.findOne(query, options);
+        console.log(response);
+        return response;
+    } finally {
+        await client.close();
+    }
+}
+
+
 async function queryFind(collection, query, projection = {}, options) {
     try {
         await client.connect();
@@ -31,7 +47,7 @@ async function queryFind(collection, query, projection = {}, options) {
         const response = await col.find(query).project(projection).toArray(function (err, result) {
             if (err) throw err;
             // console.log(result);
-            db.close();
+            client.close();
         });
         console.log(response);
         return response;
@@ -52,16 +68,18 @@ async function loadAcceptances(acceptances) {
 
 async function getAcceptance(meetcode) {
     try {
-        const response = await queryFind('acceptances',
+        const response = await findOne('acceptances',
             { 'Meeting.@MeetCode': meetcode },
             {
-                "Meeting.!": 0, "Meeting.@InputFilename": 0,
-                "Meeting.Races.Race.TrackRecords": 0,
-                "Meeting.Races.Race.RaceEntries.RaceEntry.Form.FormSummary": 0,
-                "Meeting.Races.Race.RaceEntries.RaceEntry.Form.ResultsSummaries": 0,
-                "Meeting.Races.Race.RaceEntries.RaceEntry.Form.LastStarts": 0,
-                "Meeting.Races.Race.RaceEntries.RaceEntry.HorseOwnership": 0,
-                "Meeting.Races.Race.RaceEntries.RaceEntry.Breeding": 0
+                "projection": {
+                    "Meeting.!": 0, "Meeting.@InputFilename": 0,
+                    "Meeting.Races.Race.TrackRecords": 0,
+                    "Meeting.Races.Race.RaceEntries.RaceEntry.Form.FormSummary": 0,
+                    "Meeting.Races.Race.RaceEntries.RaceEntry.Form.ResultsSummaries": 0,
+                    "Meeting.Races.Race.RaceEntries.RaceEntry.Form.LastStarts": 0,
+                    "Meeting.Races.Race.RaceEntries.RaceEntry.HorseOwnership": 0,
+                    "Meeting.Races.Race.RaceEntries.RaceEntry.Breeding": 0
+                }
             },
             {});
         return response;
