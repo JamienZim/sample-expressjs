@@ -24,7 +24,7 @@ async function insertOne(collection, doc) {
     }
 }
 
-async function findOne(collection, query, options) {
+async function findOneDoc(collection, query, options) {
     try {
         await client.connect();
         const database = client.db(dbconfig.db.RNSWDB);
@@ -68,7 +68,7 @@ async function loadAcceptances(acceptances) {
 
 async function getAcceptance(meetcode) {
     try {
-        const response = await findOne('acceptances',
+        const response = await findOneDoc('acceptances',
             { 'Meeting.@MeetCode': meetcode },
             {
                 "projection": {
@@ -80,8 +80,7 @@ async function getAcceptance(meetcode) {
                     "Meeting.Races.Race.RaceEntries.RaceEntry.HorseOwnership": 0,
                     "Meeting.Races.Race.RaceEntries.RaceEntry.Breeding": 0
                 }
-            },
-            {});
+            });
         return response;
     } catch (error) {
         console.log(error);
